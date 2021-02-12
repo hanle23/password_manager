@@ -8,7 +8,7 @@ def menu():
     print('2. Find a password')
     print('Q. Exit')
     print('-'*30)
-    return input('Your choice: ')
+    return input('Your choice: ').capitalize()
 
 
 # def create():
