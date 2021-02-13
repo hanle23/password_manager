@@ -1,7 +1,7 @@
 from hashlib import sha256
 import random
 
-SECRET_KEY = '23102000'
+SECRET_KEY = '41256234234'  # Secret key could be change based on user wants
 
 
 def make_password(plaintext, app_name):

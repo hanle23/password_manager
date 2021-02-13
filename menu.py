@@ -3,6 +3,8 @@ import subprocess
 from hash_maker import password
 from sys import platform
 
+# Main menu
+
 
 def menu():
     print(('-'*13) + 'MENU' + ('-' * 13))
@@ -14,6 +16,8 @@ def menu():
     print('-'*30)
     return input('Your choice: ').capitalize()
 
+# Create new password
+
 
 def create():
     print('Please provide the name of the site or app you want to generate a password for')
@@ -21,10 +25,10 @@ def create():
     print('Please provide a simple password for this site')
     plaintext = input(": ")
     passw = password(plaintext, app_name, 12)
-    if platform == 'win32':
+    if platform == 'win32':  # Check if platform is windows
         subprocess.run('clip.exe', universal_newlines=True,
                        input=passw, shell=True)
-    elif platform == 'linux' or platform == 'linux2':
+    elif platform == 'linux' or platform == 'linux2':  # Check if platform is linux
         subprocess.run('xclip', universal_newlines=True,
                        input=passw, shell=True)
     else:
@@ -47,7 +51,7 @@ def create():
     menu()
 
 
-def find():
+def find():  # Menu that helps finding password based on a method
     print('What method do you want to find your password?')
     print('1. By site or app name')
     print('2. By your email')
@@ -74,14 +78,14 @@ def find():
             choice = menu()
 
 
-def find_accounts():
+def find_accounts():    # Menu that helps find_user function
     user_email = input(
         'Please provide the email that you want to find information for: ')
     find_users(user_email)
     exit()
 
 
-def add():
+def add():  # Function that add information into exist database
     print('Please type the name of the site or app you want to add a password for')
     app_name = input(": ")
     print('Please type the password of the site')

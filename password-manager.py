@@ -1,6 +1,11 @@
+# Import module
 from menu import menu, create, find, find_accounts, add
+from database import connect, create_table, table_exist, delete_table
+
+# Import json for saving login information
 import json
-from database import connect
+
+# Reading Login information if available, if not, create new file
 
 
 def readUsers():
@@ -10,14 +15,18 @@ def readUsers():
     except FileNotFoundError:
         return {}
 
+# Write new user information to json file
+
 
 def writeUsers(usr):
     with open("users.json", "w+") as f:
         json.dump(usr, f)
 
 
+# Login function that check password and username
 def login(usr):
     print("Welcome back! Please enter your information as follow:")
+    print("Type Q at anytime to exit")
     username = input("Username: ")
     password = input("Password: ")
     if username in usr.keys():
@@ -25,21 +34,43 @@ def login(usr):
             print("-"*30)
             print("Welcome back.")
             return True
+        elif password == "Q":
+            exit()
         else:
-            print("Incorrect password.")
+            print("Incorrect password, please try again.")
+            print("-"*30)
             return False
+    elif username == "Q":
+        exit()
+    else:
+        print("Username is not exist, please try again")
+        print("-"*30)
+        return False
+
+# Register function for new user, create new "accounts" table
 
 
 def register(usr):
     print("Hi stranger! Please enter your information as follow:")
     username = input("Username: ")
-    connection = connect()
-    mycursor = connection.cursor()
-    mycursor.execute(
-        "CREATE TABLE accounts (password VARCHAR(60), user_email VARCHAR(60), username VARCHAR(60), url VARCHAR(255), app_name VARCHAR(60))")
-    connection.commit()
     password = input("Password: ")
     snd_password = input("Confirming password: ")
+    if username in usr.keys():
+        print("The account is already exist, please try to login")
+        quit()
+    # Check if database has already exist
+    if table_exist:
+        print("Data detected, do you still want to process to register and delete old data? (Yes/No)")
+        choice = input(": ").capitalize()
+        if choice == "Yes":
+            delete_table()
+            create_table()
+        else:
+            quit()
+    elif not table_exist:
+        create_table()
+
+    # Comparing two password
     if password == snd_password:
         usr[username] = password
         writeUsers(usr)
@@ -48,14 +79,46 @@ def register(usr):
         print("Password is not similar, please try again")
         return False
 
+# Change password function for existence user
+
+
+def change_password(usr):
+    print("Type in your information to change password:")
+    print("Type Q at anytime to exit")
+    username = input("Username: ")
+    old_password = input("Password: ")
+    if username in usr.keys():
+        if old_password == usr[username]:
+            new_password = input("New password: ")
+            conf_new_password = input("Confirm New Password: ")
+            if new_password == conf_new_password:
+                usr[username] = new_password
+                print("Password change success")
+                return True
+            else:
+                print("New password does not similar")
+                return False
+        elif old_password == "Q":
+            exit()
+        else:
+            print("Your password is wrong, please try again")
+            return False
+    elif username == "Q":
+        exit()
+    else:
+        print("Username is unavailable, please try again")
+        return False
+
 
 def main():
     users = readUsers()
     print("Please choose from one of the following options")
     print("1. Register as a new user")
     print("2. Login as a returning user")
+    print("3. Change password")
     print("-----------------------------")
     choice = input(": ")
+
     if choice == "1":
         success = register(users)
         while not success:
@@ -64,6 +127,11 @@ def main():
         success = login(users)
         while not success:
             success = login(users)
+    elif choice == "3":
+        success = change_password(users)
+        while not success:
+            success = change_password(users)
+
     choice = menu()
     while choice != 'Q':
         if choice == '1':
