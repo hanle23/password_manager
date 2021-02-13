@@ -1,5 +1,6 @@
-from menu import menu, create, find
+from menu import menu, create, find, find_accounts, add
 import json
+from database import connect
 
 
 def readUsers():
@@ -19,10 +20,11 @@ def login(usr):
     print("Welcome back! Please enter your information as follow:")
     username = input("Username: ")
     password = input("Password: ")
-
     if username in usr.keys():
         if password == usr[username]:
+            print("-"*30)
             print("Welcome back.")
+            return True
         else:
             print("Incorrect password.")
             return False
@@ -31,6 +33,11 @@ def login(usr):
 def register(usr):
     print("Hi stranger! Please enter your information as follow:")
     username = input("Username: ")
+    connection = connect()
+    mycursor = connection.cursor()
+    mycursor.execute(
+        "CREATE TABLE accounts (password VARCHAR(60), user_email VARCHAR(60), username VARCHAR(60), url VARCHAR(255), app_name VARCHAR(60))")
+    connection.commit()
     password = input("Password: ")
     snd_password = input("Confirming password: ")
     if password == snd_password:
@@ -62,7 +69,11 @@ def main():
         if choice == '1':
             create()
         elif choice == '2':
+            add()
+        elif choice == '3':
             find()
+        elif choice == '4':
+            find_accounts()
         else:
             choice = menu()
 
