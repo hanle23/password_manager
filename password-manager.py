@@ -28,8 +28,8 @@ def login(usr):
     print("Welcome back! Please enter your information as follow:")
     print("Type Q at anytime to exit")
     username = input("Username: ")
-    password = input("Password: ")
     if username in usr.keys():
+        password = input("Password: ")
         if password == usr[username]:
             print("-"*30)
             print("Welcome back.")
