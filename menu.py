@@ -64,12 +64,12 @@ def find():  # Menu that helps finding password based on a method
             app_name = input(": ")
             find_password_app_name(app_name)
             exit()
-        if choice == '2':
+        elif choice == '2':
             print('Enter your email: ')
             user_email = input(": ")
             find_password_email(user_email)
             exit()
-        if choice == '3':
+        elif choice == '3':
             print('Enter your username')
             username = input(": ")
             find_password_username(username)
