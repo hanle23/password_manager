@@ -34,13 +34,13 @@ def login(usr):
             print("-"*30)
             print("Welcome back.")
             return True
-        elif password == "Q":
+        elif password == 'Q' or password == 'q':
             exit()
         else:
             print("Incorrect password, please try again.")
             print("-"*30)
             return False
-    elif username == "Q":
+    elif username == 'Q' or username == 'q':
         exit()
     else:
         print("Username is not exist, please try again")
@@ -57,7 +57,7 @@ def register(usr):
     snd_password = input("Confirming password: ")
     if username in usr.keys():
         print("The account is already exist, please try to login")
-        quit()
+        return False
     # Check if database has already exist
     if table_exist:
         print("Data detected, do you still want to process to register and delete old data? (Yes/No)")
@@ -112,25 +112,31 @@ def change_password(usr):
 
 def main():
     users = readUsers()
-    print("Please choose from one of the following options")
-    print("1. Register as a new user")
-    print("2. Login as a returning user")
-    print("3. Change password")
-    print("-----------------------------")
-    choice = input(": ")
+    while True:
+        print("Please choose from one of the following options")
+        print("1. Register as a new user")
+        print("2. Login as a returning user")
+        print("3. Change password")
+        print("Q. Exit")
+        print("-----------------------------")
+        choice = input(": ")
 
-    if choice == "1":
-        success = register(users)
-        while not success:
+        if choice == "1":
             success = register(users)
-    elif choice == "2":
-        success = login(users)
-        while not success:
+            while not success:
+                success = register(users)
+        elif choice == "2":
             success = login(users)
-    elif choice == "3":
-        success = change_password(users)
-        while not success:
+            while not success:
+                success = login(users)
+        elif choice == "3":
             success = change_password(users)
+            while not success:
+                success = change_password(users)
+        elif choice == 'Q' or choice == 'q':
+            exit()
+        else:
+            print("Input not valid, please try again. \n")
 
     choice = menu()
     while choice != 'Q':
